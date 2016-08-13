@@ -55,8 +55,8 @@ router.post('/graph', function(req,res){
 });
 
 router.get('/', ensureAuthenticated, function (req, res, next) {
-    res.render('model', {
-        "title": 'model'
+    res.render('job', {
+        "title": 'job'
     });
 });
 
@@ -130,7 +130,7 @@ function doJsonSearch(req, res, searchText, searchTags, curPage, completeBool) {
     var db = req.db;
     var mysqlConn = req.mysqlConn;
     
-    var query = "select * from modelMaster";
+    var query = "select * from jobMaster";
     mysqlConn.query(query,function(err,rows){
     res.jsonp({
                   "resultDo": rows
