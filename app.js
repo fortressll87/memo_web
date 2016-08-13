@@ -18,7 +18,7 @@ var config = require('./config.json');
 var bcrypt = require('bcryptjs');
 
 var db =require('monk')(config.db_connection_url);
-
+var mongoose = require('mongoose');
 var app = express();
 
 // view engine setup
@@ -34,6 +34,19 @@ app.use(function(req,res,next){
     next();
 });
 
+// [ CONFIGURE mongoose ]
+/*
+// CONNECT TO MONGODB SERVER
+var mongodb = mongoose.connection;
+mongodb.on('error', console.error);
+mongodb.once('open', function(){
+    // CONNECTED TO MONGODB SERVER
+    console.log("Connected to mongod server");
+});
+ 
+mongoose.connect('mongodb://admin:bigdata12@ds027819.mlab.com:27819/contents?authMechanism=SCRAM-SHA-1');
+///////
+*/
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -53,6 +66,8 @@ var about = require('./routes/about');
 var memo = require('./routes/memo');
 var checklist = require('./routes/checklist');
 var users = require('./routes/users');
+var greeting = require('./routes/greeting');
+var work = require('./routes/work');
 
 // Passport
 app.use(passport.initialize());
@@ -96,6 +111,8 @@ app.use('/about', about);
 app.use('/memo', memo);
 app.use('/checklist', checklist);
 app.use('/users', users);
+app.use('/greeting', greeting);
+app.use('/work', work);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
