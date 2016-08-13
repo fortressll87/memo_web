@@ -130,7 +130,10 @@ function doJsonSearch(req, res, searchText, searchTags, curPage, completeBool) {
     var db = req.db;
     var mysqlConn = req.mysqlConn;
     
-    var query = "select * from modelMaster";
+    var query = "SELECT a.model_id, b1.job_name AS target_job, a.status,";
+    query += " b2.job_name AS negative_job, a.model_type, a.model_path, a.reg_date";
+    query += " FROM modelMaster a, jobMaster b1, jobMaster b2";
+    query += " WHERE a.model_job_id = b1.job_seq AND a.negative_job_id = b2.job_seq";
     mysqlConn.query(query,function(err,rows){
     res.jsonp({
                   "resultDo": rows
