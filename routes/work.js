@@ -7,10 +7,10 @@ var ObjectID = require('mongodb').ObjectID;
 
 var mysql = require('mysql');
 var connection = mysql.createConnection({
-    host    :'localhost',
+    host    :'192.168.10.33',
     port : 3306,
-    user : 'root',
-    password : 'bigdatapjt02',
+    user : 'hadoop',
+    password : 'hadoop',
     database:'master'
 });
 

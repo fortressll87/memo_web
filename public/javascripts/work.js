@@ -169,7 +169,7 @@ obj_NgApp.controller('ctr_memoDtl', ['$scope', '$routeParams', '$http', '$docume
 obj_NgApp.controller('ctr_memo', function ($scope, $http, sharedDObj, $document, $window, $location, sharedDObj) {
 
 function drawChart() {
-    var data = google.visualization.arrayToDataTable([
+    $scope.data = google.visualization.arrayToDataTable([
         ['Task', 'Hours per Day'],
         ['Work',     11],
         ['Eat',      2],
@@ -182,7 +182,7 @@ function drawChart() {
         is3D: true,
     };
     var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-    chart.draw(data, options);
+    chart.draw($scope.data, options);
     //google.visualization.events.addListener(chart, 'select', selectHandler);
     google.visualization.events.addListener(chart, 'select', function() {
         var selection = chart.getSelection();
@@ -193,6 +193,7 @@ function drawChart() {
         console.log("----------");
         $scope.graphClick();
         });
+        $scope.chart = chart;
 }
 function selectHandler() {
     var selection = chart.getSelection();
@@ -393,17 +394,20 @@ function selectHandler() {
     }
 
     $scope.graphClick = function () {
-	console.log("/view .scope graphclick");
-        var ctrUrl = baseUrl + '/graph';
-        var searchtext = $scope.sharedDObj.searchText || ''
+        var selection = $scope.chart.getSelection();
+        var selRow = selection[0];
+        var selCategory = $scope.data.getValue($scope.chart.getSelection()[0].row, 0)
+        console.log("chart category: " + selCategory);
+            // var ctrUrl = baseUrl + '/graph';
+            // var searchtext = $scope.sharedDObj.searchText || ''
 
-        $http.post(ctrUrl, {"searchword": searchtext}).success(function (returnData) {
-            searchResultHandler(returnData);
-            $scope.rows = returnData.rows
+            // $http.post(ctrUrl, {"searchword": searchtext}).success(function (returnData) {
+            //     searchResultHandler(returnData);
+            //     $scope.rows = returnData.rows
 
-        }).error(function (data, status, headers, config) {
-            alert('error: ' + status);
-        });
+            // }).error(function (data, status, headers, config) {
+            //     alert('error: ' + status);
+            // });
        // $location.path('/detail/' + 'N');
     }
 
