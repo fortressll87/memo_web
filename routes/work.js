@@ -50,7 +50,7 @@ router.post('/initGraph', function(req,res){
     query += " GROUP BY a.job_seq, c.model_id";
     
     console.log("Graph query: " + query);
-    myqlConn.query(query,function(err,rows){
+    mysqlConn.query(query,function(err,rows){
         res.jsonp({
                   "rows": rows
                    });

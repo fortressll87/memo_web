@@ -177,12 +177,12 @@ function drawChart() {
         ['Watch TV', 2],
         ['Sleep',    7]
         ]);
-    var options = {
+    $scope.options = {
         title: 'Result Chart',
         is3D: true,
     };
     var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-    chart.draw($scope.data, options);
+    chart.draw($scope.data, $scope.options);
     //google.visualization.events.addListener(chart, 'select', selectHandler);
     google.visualization.events.addListener(chart, 'select', function() {
         var selection = chart.getSelection();
@@ -421,9 +421,19 @@ function selectHandler() {
             // var searchtext = $scope.sharedDObj.searchText || ''
 
         $http.post(ctrUrl, {"searchword": sel}).success(function (returnData) {
-        searchResultHandler(returnData);
-        $scope.rows = returnData.rows
-
+            searchResultHandler(returnData);
+            $scope.rows = returnData.rows
+            var temp = returnData.rows
+            var list = [];
+            list[0] = ['Task', 'Result Chart'];
+            for(i=0; i<temp.length; i++) {
+                var row = [ temp[i].job_name, temp[i].cnt ];
+                list[list.length] = row
+            }
+            //var chart1_data = new google.visualization.DataTable(list);
+            var chart1_data = google.visualization.arrayToDataTable(list);
+            $scope.chart.draw(chart1_data, $scope.options);
+            //console.log($scope.rows)
             // }).error(function (data, status, headers, config) {
             //     alert('error: ' + status);
             // });
