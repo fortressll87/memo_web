@@ -25,8 +25,8 @@ connection.connect(function(err) {
 
 //select all
 router.post('/selectType', function(req,res){
-    var searchword = req.body.searchword
-    //var query = "select * from stopwords where name like concat('%', '" + searchword + "', '%')"
+    var dataType = req.body.dataType
+    //var query = "select * from stopwords where name like concat('%', '" + dataType + "', '%')"
     var query = "select type from chartExample";
     console.log("/route.post /selectType ");
     var query = connection.query(query,function(err,rows){
@@ -39,11 +39,31 @@ router.post('/selectType', function(req,res){
     console.log(query);
 });
 
+
+router.post('/initGraph', function(req,res){
+    //var dataType = req.body.dataType;
+    var db = req.db;
+    var mysqlConn = req.mysqlConn;
+    var query = "SELECT a.job_name, c.model_id, COUNT(*) AS cnt";
+    query += " FROM jobMaster a, blogContentsInfo b, modelTestResult c";
+    query += " WHERE a.job_seq = b.job_id AND b.url = c.url AND c.model_id = 1";
+    query += " GROUP BY a.job_seq, c.model_id";
+    
+    console.log("Graph query: " + query);
+    myqlConn.query(query,function(err,rows){
+        res.jsonp({
+                  "rows": rows
+                   });
+        });
+    console.log("initGraph query: " + query);
+    //var query = "select * from chartExample where type= eelike concat('%', '" + dataType + "', '%')"
+});
+
 router.post('/graph', function(req,res){
-    var searchword = req.body.searchword
-    console.log("post graph!");
-    var query = "select * from chartExample where type='normal'";
-    //var query = "select * from chartExample where type= eelike concat('%', '" + searchword + "', '%')"
+    var dataType = req.body.dataType
+    var query = "select * from chartExample where type='" + dataType + "'";
+    console.log("post graph query: " + query);
+    //var query = "select * from chartExample where type= eelike concat('%', '" + dataType + "', '%')"
     var query = connection.query(query,function(err,rows){
        // console.log(rows);
 	res.jsonp({

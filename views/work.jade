@@ -34,12 +34,16 @@ block content
                                         |&nbsp;exclude complete&nbsp;
                                 input.btn.btn-default(type='button', value='Search', ng-click='searchClick()')
                                 input.btn.btn-default(type='button',value='Result', ng-click='newPostClick()')
+                                input.btn.btn-default(type='button',value='Load', ng-click='loadClick()')
                                 label &nbsp;total count: &nbsp;{{sharedDObj.total_cnt}}
                 br
                 .row
                     .col-md-12
                         span.badge(style="cursor:pointer", ng-click='searchClick("All")') All
                         span.badge(style="cursor:pointer", ng-repeat="item in keywords", ng-click="searchClick(item)", ng-class="{'selected-badge': item == sharedDObj.searchTag}") {{item}}
+                .row
+                    .col-md-3
+
                 .row
                     .col-md-3
                         #piechart(style='width: 900px; height: 500px;')

@@ -169,7 +169,7 @@ obj_NgApp.controller('ctr_memoDtl', ['$scope', '$routeParams', '$http', '$docume
 obj_NgApp.controller('ctr_memo', function ($scope, $http, sharedDObj, $document, $window, $location, sharedDObj) {
 
 function drawChart() {
-    $scope.data = google.visualization.arrayToDataTable([
+        $scope.data = google.visualization.arrayToDataTable([
         ['Task', 'Hours per Day'],
         ['Work',     11],
         ['Eat',      2],
@@ -398,19 +398,38 @@ function selectHandler() {
         var selRow = selection[0];
         var selCategory = $scope.data.getValue($scope.chart.getSelection()[0].row, 0)
         console.log("chart category: " + selCategory);
-            // var ctrUrl = baseUrl + '/graph';
+        
+        var ctrUrl = baseUrl + '/graph';
             // var searchtext = $scope.sharedDObj.searchText || ''
 
-            // $http.post(ctrUrl, {"searchword": searchtext}).success(function (returnData) {
-            //     searchResultHandler(returnData);
-            //     $scope.rows = returnData.rows
+        $http.post(ctrUrl, {"searchword": selCategory}).success(function (returnData) {
+        searchResultHandler(returnData);
+        $scope.rows = returnData.rows
 
             // }).error(function (data, status, headers, config) {
             //     alert('error: ' + status);
             // });
        // $location.path('/detail/' + 'N');
-    }
+    });
+}
 
+    $scope.loadClick = function () {
+        var sel = "0";
+        console.log("loadClick: " + sel);
+        
+        var ctrUrl = baseUrl + '/initGraph';
+            // var searchtext = $scope.sharedDObj.searchText || ''
+
+        $http.post(ctrUrl, {"searchword": sel}).success(function (returnData) {
+        searchResultHandler(returnData);
+        $scope.rows = returnData.rows
+
+            // }).error(function (data, status, headers, config) {
+            //     alert('error: ' + status);
+            // });
+       // $location.path('/detail/' + 'N');
+    });
+}
     $scope.rowClick = function (idx) {
         // if ($scope.selInx == idx) {
         //     $location.url('/list');
