@@ -28,9 +28,28 @@ app.set('view engine', 'jade');
 var upload = multer({ dest: './uploads' });
 app.use(upload);
 
+var mysql = require('mysql');
+var mysqlConn = mysql.createConnection({
+    host    :'192.168.10.33',
+    port : 3306,
+    user : 'hadoop',
+    password : 'hadoop',
+    database:'master'
+});
+
+mysqlConn.connect(function(err) {
+    if (err) {
+        console.error('mysql connection error');
+        console.error(err);
+        throw err;
+    }
+    console.log("Connected to mysql server");	
+});
+
 // Make our db accessible to our router
 app.use(function(req,res,next){
     req.db = db;
+    req.mysqlConn = mysqlConn;
     next();
 });
 
@@ -68,6 +87,7 @@ var checklist = require('./routes/checklist');
 var users = require('./routes/users');
 var greeting = require('./routes/greeting');
 var work = require('./routes/work');
+var job = require('./routes/job');
 
 // Passport
 app.use(passport.initialize());
@@ -113,6 +133,7 @@ app.use('/checklist', checklist);
 app.use('/users', users);
 app.use('/greeting', greeting);
 app.use('/work', work);
+app.use('/job', job);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
