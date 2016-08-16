@@ -170,16 +170,14 @@ obj_NgApp.controller('ctr_memo', function ($scope, $http, sharedDObj, $document,
 
 function drawChart() {
         $scope.data = google.visualization.arrayToDataTable([
-        ['Task', 'Hours per Day'],
-        ['Work',     11],
-        ['Eat',      2],
-        ['Commute',  2],
-        ['Watch TV', 2],
-        ['Sleep',    7]
+        ['model', 'rate'],
+        ['dummy', '100']
         ]);
     $scope.options = {
-        title: 'Result Chart',
+        title: 'result chart',
         is3D: true,
+        'width':600,
+        'height':400
     };
     var chart = new google.visualization.PieChart(document.getElementById('piechart'));
     chart.draw($scope.data, $scope.options);
