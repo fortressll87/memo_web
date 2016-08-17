@@ -69,29 +69,47 @@ router.post('/initGraph', function (req, res) {
     //var dataType = req.body.dataType;
     var db = req.db;
     var mysqlConn = req.mysqlConn;
-    var query = "";
-    query += "SELECT mm.model_id, mm.model_path, mm.model_desc, ";
-    query += "cm.job_id, jm.job_name, COUNT(*) AS total_cnt, ";
-    query += "(COUNT(*) - SUM(mtr.result)) AS result_sum, ";
-    query += "(100 - ROUND(SUM(mtr.result) / COUNT(*) * 100)) AS pct, ";
-    query += "ROUND(SUM(mtr.result) / COUNT(*) * 100) AS negative_pct ";
-    query += "FROM modelMaster mm, modelTestResult mtr, contentsMaster cm, jobMaster jm ";
-    query += "WHERE mm.model_id = mtr.model_id AND mtr.contents_id = cm.contents_id ";
-    query += "AND cm.job_id = jm.job_seq ";
-    query += "GROUP BY mm.model_id, cm.job_id ";
-        
-//    var query = "SELECT a.job_name, c.model_id, COUNT(*) AS cnt";
-//    query += " FROM jobMaster a, contentsMaster b, modelTestResult c";
-//    query += " WHERE a.job_seq = b.job_id AND b.contents_id = c.contents_id AND c.model_id = 1";
-//    query += " GROUP BY a.job_seq, c.model_id";
-    //console.log("Graph query: " + query);
-    mysqlConn.query(query, function (err, rows) {
+    
+    async.parallel([
+        function (callback) {
+            var query = "";
+            query += "SELECT mm.model_id, mm.model_path, mm.model_desc, ";
+            query += "cm.job_id, jm.job_name, COUNT(*) AS total_cnt, ";
+            query += "(COUNT(*) - SUM(mtr.result)) AS result_sum, ";
+            query += "(100 - ROUND(SUM(mtr.result) / COUNT(*) * 100)) AS pct, ";
+            query += "ROUND(SUM(mtr.result) / COUNT(*) * 100) AS negative_pct ";
+            query += "FROM modelMaster mm, modelTestResult mtr, contentsMaster cm, jobMaster jm ";
+            query += "WHERE mm.model_id = mtr.model_id AND mtr.contents_id = cm.contents_id ";
+            query += "AND cm.job_id = jm.job_seq ";
+            query += "GROUP BY mm.model_id, cm.job_id ";
+            
+            mysqlConn.query(query, function (err, rows) {
+                callback(null, rows);
+            });
+            
+        }
+        , function (callback) {
+            var query = "";
+            query += "SELECT count(*) as cnt ";
+            query += "FROM (SELECT mm.model_id, cm.job_id ";
+            query += "FROM modelMaster mm, modelTestResult mtr, contentsMaster cm, jobMaster jm ";
+            query += "WHERE mm.model_id = mtr.model_id AND mtr.contents_id = cm.contents_id ";
+            query += "AND cm.job_id = jm.job_seq ";
+            query += "GROUP BY mm.model_id, cm.job_id) a ";
+            
+            mysqlConn.query(query, function (err, cnt) {
+                callback(null, cnt);
+            });
+            
+        }
+    ], function (err, results) {
         res.jsonp({
-            "rows": rows
+            "cnt": results[1]
+            , 'rows': results[0]
         });
+        
     });
-    console.log("initGraph query: " + query);
-    //var query = "select * from chartExample where type= eelike concat('%', '" + dataType + "', '%')"
+        
 });
 
 router.post('/graph', function (req, res) {

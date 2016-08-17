@@ -371,6 +371,7 @@ obj_NgApp.controller('ctr_memo', function ($scope, $http, sharedDObj, $document,
         }).success(function (returnData) {
             searchResultHandler(returnData);
             $scope.rows = returnData.rows;
+            $scope.sharedDObj.total_cnt = returnData.cnt[0].cnt;
 //            var temp = returnData.rows
 //            var list = [];
 //            list[0] = ['Task', 'Result Chart'];
