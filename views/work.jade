@@ -45,51 +45,26 @@ block content
                     .col-md-3
 
                 .row
-                    .col-md-8
+                    .col-md-6
                         .table-responsive
                             table.table.mytable
                                 thead
                                     th #
-                                    th 작업명
-                                    th 모델명
-                                    th 모델 설명
-                                    th 총갯수
-                                    th 적합도
+                                    th URL
+                                    th Type
+                                    th Score
+                                    th Y/N
                                 tbody
                                     tr(ng-repeat="item in rows", style="cursor:pointer", ng-click='rowClick($index)')
                                        td(id='col_index_{{$index}}') {{((sharedDObj.curPage - 1) * perPage) + $index + 1}}
-                                       td(id='col_contents_{{$index}}') {{item.job_name}}
-                                       td(id='col_contents_{{$index}}') {{item.model_path}}
-                                       td(id='col_contents_{{$index}}') {{item.model_desc}}
-                                       td(id='col_contents_{{$index}}') {{item.total_cnt}}
-                                       td(id='col_contents_{{$index}}') {{item.pct}}%
+                                       td(id='col_contents_{{$index}}') {{item.url}}
+                                       td(id='col_contents_{{$index}}') {{item.type}}
+                                       td(id='col_contents_{{$index}}') {{item.score}}
+                                       td(id='col_contents_{{$index}}') {{item.yn}}
                         div(style='text-align: center;')
-                            pagination.pagination-sm(boundary-links='true', total-items='total_cnt', ng-model='sharedDObj.curPage', ng-change='pageChanged()', items-per-page='perPage', max-size='maxPaginationPerPage', previous-text='‹', next-text='›', first-text='«', last-text='»')                            pagination.pagination-sm(boundary-links='true', total-items='total_cnt', ng-model='sharedDObj.curPage', ng-change='pageChanged()', items-per-page='perPage', max-size='maxPaginationPerPage', previous-text='‹', next-text='›', first-text='«', last-text='»')
-
-                    .col-md-4
+                            pagination.pagination-sm(boundary-links='true', total-items='total_cnt', ng-model='sharedDObj.curPage', ng-change='pageChanged()', items-per-page='perPage', max-size='maxPaginationPerPage', previous-text='‹', next-text='›', first-text='«', last-text='»')
+                    .col-md-3
                         #piechart(style="width: 100% height: 100%")
-                .row
-                    .col-md-12
-                        .table-responsive
-                            table.table.mytable
-                                thead
-                                    th #
-                                    th url
-                                    th 결과
-                                    th 부적합 여부
-                                    th 부적합 신고
-                                tbody
-                                    tr(ng-repeat="item in detailDo", style="cursor:pointer", ng-click='rowClick($index)')
-                                       td(id='col_index_{{$index}}') {{((sharedDObj.curPage - 1) * perPage) + $index + 1}}
-                                       td(id='col_contents_{{$index}}' style='width: 50%') 
-                                           a(href='{{item.url}}' target='_blank') {{item.url}}
-                                       td(id='col_contents_{{$index}}') {{item.result == 0 ? '일치' : '불일치'}}
-                                       td(id='col_contents_{{$index}}') {{item.na_yn}}                                
-                                       td(id='col_contents_{{$index}}')
-                                           input.btn.btn-default(type='button',value='신고', ng-click='issueClick($index)')
-                                       
-                        div(style='text-align: center;')
-                            pagination.pagination-sm(boundary-links='true', total-items='detailPage.total_cnt', ng-model='detailPage.curPage', ng-change='detailPageChanged()', items-per-page='perPage', max-size='maxPaginationPerPage', previous-text='‹', next-text='›', first-text='«', last-text='»')                        
 
             script(type='text/ng-template', id='detail.html')
                 form.form-inline(method='post', action='/memo/save')

@@ -21,57 +21,13 @@ router.post('/selectType', function (req, res) {
     console.log(query);
 });
 
-router.post('/testDetail', function (req, res) {
-    var db = req.db;
-    var mysqlConn = req.mysqlConn;
-    
-    var model_id = mysqlConn.escape(req.body.model_id);
-    var job_id = mysqlConn.escape(req.body.job_id);
-    var cur_page = mysqlConn.escape(req.body.cur_page) * 1;
-    var per_page = mysqlConn.escape(req.body.per_page) * 1;
-    
-    async.parallel([
-        function (callback) {
-            var query = "";
-            query += "SELECT mtr.model_id, mtr.result, cm.job_id, cm.url, cm.na_yn ";
-            query += "FROM modelTestResult mtr, contentsMaster cm ";
-            query += "WHERE mtr.contents_id = cm.contents_id AND mtr.model_id = '" + model_id + "' AND job_id = '" + job_id + "' ";
-            query += "ORDER BY cm.url ";
-            query += "LIMIT " + per_page + " OFFSET " + ((cur_page - 1) * per_page) + " ";
-            
-            mysqlConn.query(query, function (err, detailDo) {
-                callback(null, detailDo);
-            });
-            
-        }
-        , function (callback) {
-            var query = "";
-            query += "SELECT count(*) as cnt ";
-            query += "FROM modelTestResult mtr, contentsMaster cm ";
-            query += "WHERE mtr.contents_id = cm.contents_id AND mtr.model_id = 1 AND job_id = 1 ";
-            
-            mysqlConn.query(query, function (err, cnt) {
-                callback(null, cnt);
-            });
-            
-        }
-    ], function (err, results) {
-        res.jsonp({
-            "cnt": results[1]
-            , 'detailDo': results[0]
-        });
-        
-    });
-
-});
-
 router.post('/initGraph', function (req, res) {
     //var dataType = req.body.dataType;
     var db = req.db;
     var mysqlConn = req.mysqlConn;
     var query = "";
     query += "SELECT mm.model_id, mm.model_path, mm.model_desc, ";
-    query += "cm.job_id, jm.job_name, COUNT(*) AS total_cnt, ";
+    query += "cm.job_id, jm.job_name, COUNT(*) AS toal_cnt, ";
     query += "(COUNT(*) - SUM(mtr.result)) AS result_sum, ";
     query += "(100 - ROUND(SUM(mtr.result) / COUNT(*) * 100)) AS pct, ";
     query += "ROUND(SUM(mtr.result) / COUNT(*) * 100) AS negative_pct ";
