@@ -51,6 +51,9 @@ html
                     if user
                       li(class=(title === 'stopwords' ? 'active' : ''))
                           a(href='/stopwords') stopwords
+                    if user
+                      li(class=(title === 'batch' ? 'active' : ''))
+                          a(href='/batch') batch
                     if !user
                       li(class=(title === 'Register' ? 'active' : ''))
                           a(href='/users/register') Register
