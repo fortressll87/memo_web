@@ -54,6 +54,9 @@ html
                     if user
                       li(class=(title === 'batch' ? 'active' : ''))
                           a(href='/batch') batch
+                    if user
+                      li(class=(title === 'scheduler' ? 'active' : ''))
+                          a(href='/scheduler') scheduler
                     if !user
                       li(class=(title === 'Register' ? 'active' : ''))
                           a(href='/users/register') Register

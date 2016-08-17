@@ -92,6 +92,7 @@ var model = require('./routes/model');
 var test = require('./routes/test');
 var stopwords = require('./routes/stopwords');
 var batch = require('./routes/batch');
+var scheduler = require('./routes/scheduler');
 
 // Passport
 app.use(passport.initialize());
@@ -142,7 +143,7 @@ app.use('/model', model);
 app.use('/test', test);
 app.use('/stopwords', stopwords);
 app.use('/batch', batch);
-
+app.use('/scheduler', scheduler);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
