@@ -109,8 +109,8 @@ router.post('/graph', function (req, res) {
     console.log(query);
 });
 router.get('/', ensureAuthenticated, function (req, res, next) {
-    res.render('work', {
-        "title": 'Work'
+    res.render('test', {
+        "title": 'test'
     });
 });
 

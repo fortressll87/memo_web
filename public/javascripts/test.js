@@ -18,7 +18,7 @@ obj_NgApp.factory("sharedDObj", function () {
 });
 obj_NgApp.controller('ctr_memoDtl', ['$scope', '$routeParams', '$http', '$document', '$location', function ($scope, $routeParams, $http, $document, $location, sharedDObj) {
     $scope.sharedDObj = sharedDObj;
-    var baseUrl = '/test';
+    var baseUrl = '/work';
     $("#inp_date").datepicker({
         defaultDate: ""
         , changeMonth: true
@@ -174,7 +174,7 @@ obj_NgApp.controller('ctr_memo', function ($scope, $http, sharedDObj, $document,
         //$scope.newPostClick();
     }
     $scope.sharedDObj = sharedDObj;
-    var baseUrl = '/test';
+    var baseUrl = '/work';
     // because the value of $scope will be gone while $route's transition, some of values should be located in the data object of the factory
     $scope.sharedDObj.total_cnt = 0;
     $scope.maxPaginationPerPage = 5;

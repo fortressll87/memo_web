@@ -45,6 +45,9 @@ html
                     if user
                       li(class=(title === 'ML model' ? 'active' : ''))
                           a(href='/model') ML model
+                    if user
+                      li(class=(title === 'ML test' ? 'active' : ''))
+                          a(href='/test') ML test
                     if !user
                       li(class=(title === 'Register' ? 'active' : ''))
                           a(href='/users/register') Register
