@@ -4,7 +4,6 @@ var perPage = 5;
 var url = require('url');
 var async = require('async');
 var ObjectID = require('mongodb').ObjectID;
-
 //select all
 router.post('/selectType', function (req, res) {
     var mysqlConn = req.mysqlConn;
@@ -20,27 +19,15 @@ router.post('/selectType', function (req, res) {
     });
     console.log(query);
 });
-
 router.post('/initGraph', function (req, res) {
     //var dataType = req.body.dataType;
     var db = req.db;
     var mysqlConn = req.mysqlConn;
-    var query = "";
-    query += "SELECT mm.model_id, mm.model_path, mm.model_desc, ";
-    query += "cm.job_id, jm.job_name, COUNT(*) AS toal_cnt, ";
-    query += "(COUNT(*) - SUM(mtr.result)) AS result_sum, ";
-    query += "(100 - ROUND(SUM(mtr.result) / COUNT(*) * 100)) AS pct, ";
-    query += "ROUND(SUM(mtr.result) / COUNT(*) * 100) AS negative_pct ";
-    query += "FROM modelMaster mm, modelTestResult mtr, contentsMaster cm, jobMaster jm ";
-    query += "WHERE mm.model_id = mtr.model_id AND mtr.contents_id = cm.contents_id ";
-    query += "AND cm.job_id = jm.job_seq ";
-    query += "GROUP BY mm.model_id, cm.job_id ";
-        
-//    var query = "SELECT a.job_name, c.model_id, COUNT(*) AS cnt";
-//    query += " FROM jobMaster a, contentsMaster b, modelTestResult c";
-//    query += " WHERE a.job_seq = b.job_id AND b.contents_id = c.contents_id AND c.model_id = 1";
-//    query += " GROUP BY a.job_seq, c.model_id";
-    //console.log("Graph query: " + query);
+    var query = "SELECT a.job_name, c.model_id, COUNT(*) AS cnt";
+    query += " FROM jobMaster a, contentsMaster b, modelTestResult c";
+    query += " WHERE a.job_seq = b.job_id AND b.contents_id = c.contents_id AND c.model_id = 1";
+    query += " GROUP BY a.job_seq, c.model_id";
+    console.log("Graph query: " + query);
     mysqlConn.query(query, function (err, rows) {
         res.jsonp({
             "rows": rows
@@ -49,12 +36,11 @@ router.post('/initGraph', function (req, res) {
     console.log("initGraph query: " + query);
     //var query = "select * from chartExample where type= eelike concat('%', '" + dataType + "', '%')"
 });
-
 router.post('/graph', function (req, res) {
     var mysqlConn = req.mysqlConn;
     var dataType = req.body.dataType
     var query = "select * from chartExample where type='" + dataType + "'";
-    //console.log("post graph query: " + query);
+    console.log("post graph query: " + query);
     //var query = "select * from chartExample where type= eelike concat('%', '" + dataType + "', '%')"
     var query = mysqlConn.query(query, function (err, rows) {
         // console.log(rows);
@@ -243,11 +229,9 @@ function doJsonSearch(req, res, searchText, searchTags, curPage, completeBool) {
         });
     });
 }
-
 router.post('/search', ensureAuthenticated, function (req, res, next) {
     searchHandler(req, res, next);
 });
-
 router.post('/searchDetail', ensureAuthenticated, function (req, res, next) {
     var db = req.db;
     var test_cols = db.get('contents');
@@ -268,7 +252,6 @@ function searchHandler(req, res, next) {
     var completeBool = req.body.completeBool === undefined ? false : req.body.completeBool;
     doJsonSearch(req, res, searchText, searchTags, curPage, completeBool);
 }
-
 router.post('/savePost', ensureAuthenticated, function (req, res, next) {
     // get form values
     var selContents = req.body.sel_contents;
@@ -336,5 +319,4 @@ router.post('/savePost', ensureAuthenticated, function (req, res, next) {
         });
     }
 });
-
 module.exports = router;
