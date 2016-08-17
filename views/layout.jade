@@ -48,6 +48,9 @@ html
                     if user
                       li(class=(title === 'ML test' ? 'active' : ''))
                           a(href='/test') ML test
+                    if user
+                      li(class=(title === 'stopwords' ? 'active' : ''))
+                          a(href='/stopwords') stopwords
                     if !user
                       li(class=(title === 'Register' ? 'active' : ''))
                           a(href='/users/register') Register

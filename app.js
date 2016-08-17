@@ -90,6 +90,7 @@ var work = require('./routes/work');
 var job = require('./routes/job');
 var model = require('./routes/model');
 var test = require('./routes/test');
+var stopwords = require('./routes/stopwords');
 
 // Passport
 app.use(passport.initialize());
@@ -138,6 +139,8 @@ app.use('/work', work);
 app.use('/job', job);
 app.use('/model', model);
 app.use('/test', test);
+app.use('/stopwords', stopwords);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
